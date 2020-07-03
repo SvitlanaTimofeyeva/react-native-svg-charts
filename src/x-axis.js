@@ -91,7 +91,7 @@ class XAxis extends PureComponent {
                                 position: 'absolute',
                                 top: 0,
                                 left: 0,
-                                height,
+                                height: 100,
                                 width,
                             }}
                         >
@@ -104,19 +104,34 @@ class XAxis extends PureComponent {
                                 width > 0 &&
                                     ticks.map((value, index) => {
                                         const { svg: valueSvg = {} } = data[index] || {}
-
+                                        const label = formatLabel(value, index);
+                                        const labelItems = label.split(' ').reduce((acc, el, i) => {
+                                          if (el.length > 3) acc.push(el);
+                                          else if (el.length <= 3 && acc.length === 0) acc.push(el);
+                                          else if (el.length <= 3 && acc.length) {
+                                            acc[acc.length - 1] = `${acc[acc.length - 1]} ${el}`;
+                                          }
+                                          return acc;
+                                        }, []);
                                         return (
-                                            <SVGText
-                                                textAnchor={'middle'}
-                                                originX={x(value)}
-                                                alignmentBaseline={'hanging'}
-                                                {...svg}
-                                                {...valueSvg}
-                                                key={index}
-                                                x={x(value)}
-                                            >
-                                                {formatLabel(value, index)}
-                                            </SVGText>
+                                          <>
+                                          {labelItems.map((el, i) => {
+                                            return (
+                                              <SVGText
+                                                  textAnchor={'middle'}
+                                                  originX={x(value)}
+                                                  dy={i * 10}
+                                                  alignmentBaseline={'hanging'}
+                                                  {...svg}
+                                                  {...valueSvg}
+                                                  key={i}
+                                                  x={x(value)}
+                                              >
+                                                  {el}
+                                              </SVGText>
+                                            )
+                                          })}
+                                          </>
                                         )
                                     })}
                             </G>
