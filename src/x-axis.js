@@ -120,7 +120,7 @@ class XAxis extends PureComponent {
                                               <SVGText
                                                   textAnchor={'middle'}
                                                   originX={x(value)}
-                                                  dy={i * 10}
+                                                  dy={i * 15}
                                                   alignmentBaseline={'hanging'}
                                                   {...svg}
                                                   {...valueSvg}
